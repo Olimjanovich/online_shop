@@ -8,15 +8,42 @@ from rest_framework import status
 from .models import (
     Product
 )
-from .serializers import (
-    ProductSerializer
-)
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAuthorOrReadOnly, IsAdmin
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiParameter, OpenApiTypes
 # Create your views here.
+from .serializers import ProductSerializer
 
 
+@extend_schema(
+    methods=['POST'],
+        parameters=[
+            OpenApiParameter(
+                "product category",
+                type={"type": "STR"}, style="form", required=True,
+            ),
+            OpenApiParameter(
+                "product name",
+                type={"type": "string"}, style="form", required=True,
+            ),
+            OpenApiParameter(
+                "product desc",
+                type={"type": "string"}, style="form", required=True,
+            ),
+            OpenApiParameter(
+                "product price",
+                type={"type": "int"}, style="form", required=True,
+            ),
+            OpenApiParameter(
+                "product initial_quantity",
+                type={"type": "int"}, style="form", required=True,
+            ),
+            OpenApiParameter(
+                "product image",
+                type={"type": "file"}, style="form", required=True,
+            )
+       ])
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated, IsAdmin, ])
 def product_list(request):
